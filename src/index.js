@@ -1,61 +1,55 @@
-const http = require("https");
+const axios = require("axios");
 
-let APIURL = "https://api.recommend.co";
+let APIURL = "https://api.recommend.io";
 let APIKEY = "";
 
-function initSdk(apiKey, customUrl)
-{
-    APIKEY = apiKey;
-    if (customUrl != '') APIURL = customUrl;
+function initSdk(apiKey, customUrl) {
+  APIKEY = apiKey;
+  if (customUrl != '') {
+    console.log("Recommend SDK is using custom URL: " + customUrl);
+    APIURL = customUrl;
+  }
 }
 
-function testApiConnection()
-{
-    console.log("checking API connection");
+async function testApiConnection() {
+  console.log("Checking API connection");
 
-    const options = {
-        "method": "POST",
-        "hostname": APIURL,
-        "port": null,
-        "path": "/apikeys",
-        "headers": {
-          "Content-Type": "",
-          "Accept": "",
-          "Accept-Encoding": "",
-          "Connection": ""
-        }
-      };
-      
-      const req = http.request(options, function (res) {
-        const chunks = [];
-      
-        res.on("data", function (chunk) {
-          chunks.push(chunk);
-        });
-      
-        res.on("end", function () {
-          const body = Buffer.concat(chunks);
-          console.log(body.toString());
-        });
-      });
-      
-      req.write(JSON.stringify({
-        code: 'test-connection',
-        apiToken: APIKEY,
-        email: '',
-        phone: ''
-      }));
-      req.end();
+  const data = {
+    code: 'test-connection',
+    apiToken: APIKEY,
+    email: '',
+    phone: ''
+  };
+
+  axios.post(APIURL + "/apikeys", data)
+    .then((res) => {
+      return res.status == 200;
+    }).catch((err) => {
+      console.error(err);
+      return false;
+    });
 }
 
-function referralCheck(code, email, phone)
-{
-    console.log("Checking code: " + code);
+function referralCheck(code, email, phone) {
+  const data = {
+    code: code,
+    apiToken: APIKEY,
+    email: email,
+    phone: phone
+  };
+
+  axios.post(APIURL + "/apikeys", data)
+    .then((res) => {
+      return res.status == 200;
+    }).catch((err) => {
+      console.error(err);
+      return false;
+    });
 }
 
-module.exports = 
+module.exports =
 {
-    init: initSdk,
-    testConnection: testApiConnection,
-    checkReferral : referralCheck
+  init: initSdk,
+  testConnection: testApiConnection,
+  checkReferral: referralCheck
 }

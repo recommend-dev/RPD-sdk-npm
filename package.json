@@ -1,5 +1,5 @@
 {
-  "name": "rpd-npm-sdk",
+  "name": "@recommendworld/rpd-npm-sdk",
   "version": "1.0.0",
   "description": "Recommend API SDK",
   "main": "index.js",

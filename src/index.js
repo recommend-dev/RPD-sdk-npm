@@ -1,11 +1,11 @@
 const axios = require("axios");
 
-let APIURL = "https://api.recommend.io";
+let APIURL = "https://api.recommend.co";
 let APIKEY = "";
 
 function initSdk(apiKey, customUrl) {
   APIKEY = apiKey;
-  if (customUrl != '') {
+  if (customUrl != '' && customUrl != undefined) {
     console.log("Recommend SDK is using custom URL: " + customUrl);
     APIURL = customUrl;
   }
@@ -21,16 +21,23 @@ async function testApiConnection() {
     phone: ''
   };
 
-  axios.post(APIURL + "/apikeys", data)
-    .then((res) => {
-      return res.status == 200;
-    }).catch((err) => {
-      console.error(err);
+  try {
+    var response = await axios.post(APIURL + "/apikeys", data);
+    console.info(response);
+    if (response.status == 200) {
+      return true;
+    }
+    else {
       return false;
-    });
-}
+    }
+  }
+  catch (ex) {
+    console.error(ex);
+    return false;
+  }
 
-function referralCheck(code, email, phone) {
+}
+async function referralCheck(code, email, phone) {
   const data = {
     code: code,
     apiToken: APIKEY,
@@ -38,18 +45,25 @@ function referralCheck(code, email, phone) {
     phone: phone
   };
 
-  axios.post(APIURL + "/apikeys", data)
-    .then((res) => {
-      return res.status == 200;
-    }).catch((err) => {
-      console.error(err);
+  try {
+    var response = await axios.post(APIURL + "/apikeys", data);
+    console.info(response);
+    if (response.status == 200) {
+      return true;
+    }
+    else {
       return false;
-    });
+    }
+  }
+  catch (ex) {
+    console.error(ex);
+    return false;
+  }
 }
 
 module.exports =
 {
-  init: initSdk,
-  testConnection: testApiConnection,
-  checkReferral: referralCheck
+  initSdk,
+  testApiConnection,
+  referralCheck
 }

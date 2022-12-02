@@ -18,7 +18,9 @@ async function testApiConnection() {
     code: 'test-connection',
     apiToken: APIKEY,
     email: '',
-    phone: ''
+    phone: '',
+    orderNumber: '',
+    cartTotal: ''
   };
 
   try {
@@ -37,12 +39,14 @@ async function testApiConnection() {
   }
 
 }
-async function referralCheck(code, email, phone) {
+async function referralCheck(code, email, phone, orderNumber, cartTotal) {
   const data = {
     code: code,
     apiToken: APIKEY,
     email: email,
-    phone: phone
+    phone: phone,
+    orderNumber: orderNumber,
+    cartTotal: cartTotal
   };
 
   try {

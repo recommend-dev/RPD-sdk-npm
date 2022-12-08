@@ -53,6 +53,50 @@ async function referralCheck(code, email, phone, orderNumber, cartTotal) {
     var response = await axios.post(APIURL + "/apikeys", data);
     console.info(response);
     if (response.status == 200) {
+      return response.data;
+    }
+    else {
+      return null;
+    }
+  }
+  catch (ex) {
+    console.error(ex);
+    return null;
+  }
+}
+
+async function approveConversion(conversionId) {
+  const data = {
+    apiToken: APIKEY,
+    conversionId: conversionId
+  };
+
+  try {
+    var response = await axios.post(APIURL + "/apikeys/approve", data);
+    console.info(response);
+    if (response.status == 200) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+  catch (ex) {
+    console.error(ex);
+    return false;
+  }
+}
+
+async function rejectConversion(conversionId) {
+  const data = {
+    apiToken: APIKEY,
+    conversionId: conversionId
+  };
+
+  try {
+    var response = await axios.post(APIURL + "/apikeys/reject", data);
+    console.info(response);
+    if (response.status == 200) {
       return true;
     }
     else {
@@ -69,5 +113,7 @@ module.exports =
 {
   initSdk,
   testApiConnection,
-  referralCheck
+  referralCheck,
+  approveConversion,
+  rejectConversion
 }
